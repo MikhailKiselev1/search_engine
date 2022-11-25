@@ -8,6 +8,8 @@ spring:
     username: root
     password: testtest
     url: jdbc:mysql://localhost:3306/search_engine?useSSL=false&requireSSL=false&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true
+  liquibase:
+    enabled: true
   jpa:
     properties:
       hibernate:

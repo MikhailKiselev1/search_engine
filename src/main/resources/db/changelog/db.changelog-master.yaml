@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - include:
+      file: /db/changelog/migrations/001-create-site.sql
+  - include:
+      file: /db/changelog/migrations/002-create-page.sql
+  - include:
+      file: /db/changelog/migrations/003-create-lemma.sql
+  - include:
+      file: /db/changelog/migrations/004-create-index.sql
