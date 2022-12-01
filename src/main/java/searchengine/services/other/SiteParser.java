@@ -3,15 +3,16 @@ package searchengine.services.other;
 import lombok.SneakyThrows;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import searchengine.model.entity.Page;
 import searchengine.model.entity.Site;
 import searchengine.repository.PageRepository;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.RecursiveTask;
+
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.RecursiveTask;
 
 public class SiteParser extends RecursiveTask<Set<Page>> {
 
@@ -29,7 +30,6 @@ public class SiteParser extends RecursiveTask<Set<Page>> {
 
     }
 
-
     @SneakyThrows
     @Override
     public Set<Page> compute() {
@@ -44,19 +44,22 @@ public class SiteParser extends RecursiveTask<Set<Page>> {
         if (pageRepository.findByPath(url.toString()).isEmpty()) {
 
             pageSet.add(createPage());
+            List<SiteParser> taskList = new ArrayList<>();
 
             doc.selectXpath(linkXPath).forEach(element -> {
 
                 String link = element.attributes().get("href");
                 if (link.matches("/.+ ")) {
-                    System.out.println("link ->" + url);
-                    pageSet.addAll(new SiteParser(url.append(link), site, pageRepository).compute());
+                    SiteParser siteParser = new SiteParser(url.append(link), site, pageRepository);
+                    siteParser.fork();
+                    taskList.add(siteParser);
 
+                }
+                for (SiteParser task : taskList) {
+                    pageSet.addAll(task.join());
                 }
             });
         }
-        System.out.println(pageSet.size());
-        pageSet.forEach(System.out::println);
         return pageSet;
     }
 
