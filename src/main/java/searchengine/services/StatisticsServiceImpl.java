@@ -6,7 +6,7 @@ import searchengine.config.Site;
 import searchengine.config.SitesList;
 import searchengine.model.dto.statistics.DetailedStatisticsItem;
 import searchengine.model.dto.statistics.StatisticsData;
-import searchengine.model.dto.statistics.StatisticsResponse;
+import searchengine.model.dto.statistics.StatisticsRs;
 import searchengine.model.dto.statistics.TotalStatistics;
 
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     private final SitesList sites;
 
     @Override
-    public StatisticsResponse getStatistics() {
+    public StatisticsRs getStatistics() {
         String[] statuses = { "INDEXED", "FAILED", "INDEXING" };
         String[] errors = {
                 "Ошибка индексации: главная страница сайта не доступна",
@@ -56,7 +56,7 @@ public class StatisticsServiceImpl implements StatisticsService {
             detailed.add(item);
         }
 
-        StatisticsResponse response = new StatisticsResponse();
+        StatisticsRs response = new StatisticsRs();
         StatisticsData data = new StatisticsData();
         data.setTotal(total);
         data.setDetailed(detailed);

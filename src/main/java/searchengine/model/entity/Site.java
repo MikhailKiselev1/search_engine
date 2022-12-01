@@ -1,5 +1,6 @@
 package searchengine.model.entity;
 
+import lombok.Builder;
 import lombok.Data;
 import searchengine.model.enums.Status;
 
