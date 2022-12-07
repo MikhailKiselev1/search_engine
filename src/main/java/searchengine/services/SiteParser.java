@@ -1,4 +1,4 @@
-package searchengine.services.other;
+package searchengine.services;
 
 import lombok.SneakyThrows;
 import org.jsoup.Jsoup;
@@ -7,12 +7,11 @@ import searchengine.model.entity.Page;
 import searchengine.model.entity.Site;
 import searchengine.repository.PageRepository;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.RecursiveTask;
 
 import java.util.HashSet;
 import java.util.Set;
+
 
 public class SiteParser extends RecursiveTask<Set<Page>> {
 
@@ -27,7 +26,6 @@ public class SiteParser extends RecursiveTask<Set<Page>> {
         this.url = url;
         this.site = site;
         this.pageRepository = pageRepository;
-
     }
 
     @SneakyThrows
@@ -44,7 +42,7 @@ public class SiteParser extends RecursiveTask<Set<Page>> {
         if (pageRepository.findByPath(url.toString()).isEmpty()) {
 
             pageSet.add(createPage());
-            List<SiteParser> taskList = new ArrayList<>();
+            Set<SiteParser> taskSet = new HashSet<>();
 
             doc.selectXpath(linkXPath).forEach(element -> {
 
@@ -52,10 +50,10 @@ public class SiteParser extends RecursiveTask<Set<Page>> {
                 if (link.matches("/.+ ")) {
                     SiteParser siteParser = new SiteParser(url.append(link), site, pageRepository);
                     siteParser.fork();
-                    taskList.add(siteParser);
+                    taskSet.add(siteParser);
 
                 }
-                for (SiteParser task : taskList) {
+                for (SiteParser task : taskSet) {
                     pageSet.addAll(task.join());
                 }
             });

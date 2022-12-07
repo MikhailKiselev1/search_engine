@@ -8,7 +8,6 @@ import searchengine.model.entity.Site;
 import searchengine.model.enums.Status;
 import searchengine.repository.PageRepository;
 import searchengine.repository.SiteRepository;
-import searchengine.services.other.SiteParser;
 
 import java.time.LocalDateTime;
 

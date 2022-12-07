@@ -34,7 +34,5 @@ public class Page {
     )
     private Set<Lemma> lemmaSet;
 
-
-    @OneToMany(mappedBy = "page", cascade = CascadeType.ALL)
-    private Set<Index> indices;
+    
 }
