@@ -33,7 +33,4 @@ public class Lemma {
     )
     private Set<Page> pages;
 
-
-    @OneToMany(mappedBy = "lemma", cascade = CascadeType.ALL)
-    private Set<Index> indices;
 }

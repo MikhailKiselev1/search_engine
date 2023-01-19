@@ -13,13 +13,11 @@ public class Index {
     @Column(columnDefinition = "INT", nullable = false)
     private int id;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "page_id", referencedColumnName = "id", nullable = false, columnDefinition = "INT")
-    private Page page;
+    @Column(columnDefinition = "INT", nullable = false, name = "page_id")
+    private String pageId;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "lemma_id", referencedColumnName = "id", nullable = false, columnDefinition = "INT")
-    private Lemma lemma;
+    @Column(columnDefinition = "INT", nullable = false, name = "lemma_id")
+    private String lemmaId;
 
     @Column(name = "`rank`", nullable = false, columnDefinition = "FLOAT")
     private float rank;

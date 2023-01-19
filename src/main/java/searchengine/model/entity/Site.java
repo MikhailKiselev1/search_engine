@@ -6,6 +6,7 @@ import searchengine.model.enums.Status;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -30,6 +31,7 @@ public class Site {
     @Column(columnDefinition = "VARCHAR(255)", nullable = false)
     private String url;
 
+
     @Column(columnDefinition = "VARCHAR(255)", nullable = false)
     private String name;
 
@@ -38,4 +40,17 @@ public class Site {
 
     @OneToMany(mappedBy = "site", cascade = CascadeType.ALL)
     private Set<Page> pages;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Site site = (Site) o;
+        return id == site.id && status == site.status && statusTime.equals(site.statusTime) && lastError.equals(site.lastError) && url.equals(site.url) && name.equals(site.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, status, statusTime, lastError, url, name);
+    }
 }
