@@ -8,8 +8,10 @@ import searchengine.model.entity.Site;
 import searchengine.model.enums.Status;
 import searchengine.repository.PageRepository;
 import searchengine.repository.SiteRepository;
+import searchengine.util.SiteParser;
 
 import java.time.LocalDateTime;
+
 
 
 @Service
@@ -37,9 +39,8 @@ public class IndexService{
 
             //successes parsing
             try {
-                System.out.println("try -> ");
                 new SiteParser(new StringBuilder(site.getUrl()), currentSite, pageRepository)
-                        .compute().forEach(pageRepository::save);
+                        .compute().forEach(page -> System.out.println("\n\n\n" + page.getPath()));
                 currentSite.setStatus(Status.INDEXED);
                 currentSite.setStatusTime(LocalDateTime.now());
                 siteRepository.save(currentSite);
@@ -49,6 +50,7 @@ public class IndexService{
                 currentSite.setStatus(Status.FAILED);
                 currentSite.setStatusTime(LocalDateTime.now());
                 siteRepository.save(currentSite);
+                currentSite.setLastError(e.getMessage());
                 e.printStackTrace();
             }
 

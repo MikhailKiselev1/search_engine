@@ -1,4 +1,4 @@
-package searchengine.services;
+package searchengine.util;
 
 import lombok.SneakyThrows;
 import org.jsoup.Jsoup;
@@ -41,14 +41,18 @@ public class SiteParser extends RecursiveTask<Set<Page>> {
 
         if (pageRepository.findByPath(url.toString()).isEmpty()) {
 
+            System.out.println("pageRepository.findByPath(url.toString()).isEmpty()");
             pageSet.add(createPage());
             Set<SiteParser> taskSet = new HashSet<>();
 
             doc.selectXpath(linkXPath).forEach(element -> {
 
                 String link = element.attributes().get("href");
-                if (link.matches("/.+ ")) {
-                    SiteParser siteParser = new SiteParser(url.append(link), site, pageRepository);
+                System.out.println(link);
+                System.out.println(link.matches("\\/.+") && !url.toString().matches(link));
+                if (link.matches("\\/.+") && url.toString().matches(link)) {
+                    System.out.println(url.append(link));
+                    SiteParser siteParser = new SiteParser(url, site, pageRepository);
                     siteParser.fork();
                     taskSet.add(siteParser);
 
@@ -66,7 +70,7 @@ public class SiteParser extends RecursiveTask<Set<Page>> {
         page.setSite(site);
         page.setPath(url.toString());
         page.setCode(doc.connection().response().statusCode());
-        page.setContext(doc.body().text());
+        page.setContent(doc.body().text());
         return page;
     }
 }
